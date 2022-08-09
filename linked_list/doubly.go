@@ -6,20 +6,20 @@ import (
 	"github.com/ceferrari/go-algods/utils"
 )
 
-type Node struct {
+type DoublyNode struct {
 	val  int
-	prev *Node
-	next *Node
+	prev *DoublyNode
+	next *DoublyNode
 }
 
-type LinkedList struct {
+type DoublyLinkedList struct {
 	count int
-	head  *Node
-	tail  *Node
+	head  *DoublyNode
+	tail  *DoublyNode
 }
 
-func (l *LinkedList) InsertHead(val int) {
-	node := &Node{val: val}
+func (l *DoublyLinkedList) InsertHead(val int) {
+	node := &DoublyNode{val: val}
 	node.next = l.head
 	if l.head != nil {
 		l.head.prev = node
@@ -31,8 +31,8 @@ func (l *LinkedList) InsertHead(val int) {
 	l.count++
 }
 
-func (l *LinkedList) InsertTail(val int) {
-	node := &Node{val: val}
+func (l *DoublyLinkedList) InsertTail(val int) {
+	node := &DoublyNode{val: val}
 	node.prev = l.tail
 	if l.tail != nil {
 		l.tail.next = node
@@ -44,7 +44,7 @@ func (l *LinkedList) InsertTail(val int) {
 	l.count++
 }
 
-func (l *LinkedList) InsertPosition(val, pos int) {
+func (l *DoublyLinkedList) InsertPosition(val, pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -55,7 +55,7 @@ func (l *LinkedList) InsertPosition(val, pos int) {
 	curr := l.head.next
 	for i := 1; curr != nil; i++ {
 		if i == pos {
-			node := &Node{val: val}
+			node := &DoublyNode{val: val}
 			node.prev = curr.prev
 			node.next = curr
 			curr.prev.next = node
@@ -67,21 +67,21 @@ func (l *LinkedList) InsertPosition(val, pos int) {
 	l.count++
 }
 
-func (l *LinkedList) UpdateHead(val int) {
+func (l *DoublyLinkedList) UpdateHead(val int) {
 	if !l.checkHead() {
 		return
 	}
 	l.head.val = val
 }
 
-func (l *LinkedList) UpdateTail(val int) {
+func (l *DoublyLinkedList) UpdateTail(val int) {
 	if !l.checkTail() {
 		return
 	}
 	l.tail.val = val
 }
 
-func (l *LinkedList) UpdatePosition(val, pos int) {
+func (l *DoublyLinkedList) UpdatePosition(val, pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -92,7 +92,7 @@ func (l *LinkedList) UpdatePosition(val, pos int) {
 	curr.val = val
 }
 
-func (l *LinkedList) RemoveHead() {
+func (l *DoublyLinkedList) RemoveHead() {
 	if !l.checkHead() {
 		return
 	}
@@ -103,7 +103,7 @@ func (l *LinkedList) RemoveHead() {
 	l.count--
 }
 
-func (l *LinkedList) RemoveTail() {
+func (l *DoublyLinkedList) RemoveTail() {
 	if !l.checkTail() {
 		return
 	}
@@ -114,7 +114,7 @@ func (l *LinkedList) RemoveTail() {
 	l.count--
 }
 
-func (l *LinkedList) RemovePosition(pos int) {
+func (l *DoublyLinkedList) RemovePosition(pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -125,9 +125,9 @@ func (l *LinkedList) RemovePosition(pos int) {
 	l.remove(curr)
 }
 
-func (l *LinkedList) RemoveValue(val int) {
+func (l *DoublyLinkedList) RemoveValue(val int) {
 	curr := l.head
-	for i := 0; curr != nil; i++ {
+	for curr != nil {
 		if curr.val == val {
 			l.remove(curr)
 		}
@@ -135,7 +135,7 @@ func (l *LinkedList) RemoveValue(val int) {
 	}
 }
 
-func (l *LinkedList) SearchPosition(pos int) {
+func (l *DoublyLinkedList) SearchPosition(pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -148,7 +148,7 @@ func (l *LinkedList) SearchPosition(pos int) {
 	fmt.Scanln()
 }
 
-func (l *LinkedList) SearchValue(val int) {
+func (l *DoublyLinkedList) SearchValue(val int) {
 	poss := []int{}
 	curr := l.head
 	for i := 0; curr != nil; i++ {
@@ -166,13 +166,13 @@ func (l *LinkedList) SearchValue(val int) {
 	fmt.Scanln()
 }
 
-func (l *LinkedList) Clear() {
+func (l *DoublyLinkedList) Clear() {
 	l.count = 0
 	l.head = nil
 	l.tail = nil
 }
 
-func (l *LinkedList) remove(node *Node) {
+func (l *DoublyLinkedList) remove(node *DoublyNode) {
 	if node == l.head {
 		l.RemoveHead()
 		return
@@ -186,7 +186,7 @@ func (l *LinkedList) remove(node *Node) {
 	l.count--
 }
 
-func (l *LinkedList) checkHead() bool {
+func (l *DoublyLinkedList) checkHead() bool {
 	if l.head == nil {
 		utils.PrintDiv()
 		fmt.Println("[FAIL] Head is null!")
@@ -196,7 +196,7 @@ func (l *LinkedList) checkHead() bool {
 	return true
 }
 
-func (l *LinkedList) checkTail() bool {
+func (l *DoublyLinkedList) checkTail() bool {
 	if l.tail == nil {
 		utils.PrintDiv()
 		fmt.Println("[FAIL] Tail is null!")
@@ -206,7 +206,7 @@ func (l *LinkedList) checkTail() bool {
 	return true
 }
 
-func (l *LinkedList) checkPosition(pos int) bool {
+func (l *DoublyLinkedList) checkPosition(pos int) bool {
 	if pos < 0 || pos >= l.count {
 		utils.PrintDiv()
 		fmt.Println("[FAIL] Invalid position!")
@@ -216,7 +216,7 @@ func (l *LinkedList) checkPosition(pos int) bool {
 	return true
 }
 
-func (l *LinkedList) print() {
+func (l *DoublyLinkedList) print() {
 	curr := l.head
 	for curr != nil {
 		fmt.Print(curr.val, " ")
@@ -224,13 +224,13 @@ func (l *LinkedList) print() {
 	}
 }
 
-func Menu() {
-	l := LinkedList{}
+func DoublyMenu() {
+	l := DoublyLinkedList{}
 	op := -1
 	for op != 0 {
 		utils.ClearTerminal()
 		utils.PrintDiv()
-		fmt.Println("***          Linked List         ***")
+		fmt.Println("***      Doubly Linked List      ***")
 		utils.PrintDiv()
 		fmt.Printf("%2d | %s\n", 1, "Insert at head")
 		fmt.Printf("%2d | %s\n", 2, "Insert at tail")
