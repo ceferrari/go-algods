@@ -24,12 +24,11 @@ func (l *SinglyLinkedList) InsertHead(val int) {
 }
 
 func (l *SinglyLinkedList) InsertTail(val int) {
-	node := &SinglyNode{val: val}
 	if l.head == nil {
-		l.head = node
-		l.count++
+		l.InsertHead(val)
 		return
 	}
+	node := &SinglyNode{val: val}
 	curr := l.head
 	for curr.next != nil {
 		curr = curr.next
