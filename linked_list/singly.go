@@ -190,7 +190,7 @@ func (l *SinglyLinkedList) OrderDescending() {
 	l.order("desc")
 }
 
-func (l *SinglyLinkedList) Revert() {
+func (l *SinglyLinkedList) Reverse() {
 	a := make([]int, l.count)
 	curr := l.head
 	for i := 0; curr != nil; i++ {
@@ -268,7 +268,7 @@ func SinglyMenu() {
 		fmt.Printf("%2d | %s\n", 12, "Search by value")
 		fmt.Printf("%2d | %s\n", 13, "Order ascending")
 		fmt.Printf("%2d | %s\n", 14, "Order descending")
-		fmt.Printf("%2d | %s\n", 15, "Revert list")
+		fmt.Printf("%2d | %s\n", 15, "Reverse list")
 		fmt.Printf("%2d | %s\n", 16, "Clear list")
 		fmt.Printf("%2d | %s\n", 0, "Back to main menu")
 		utils.PrintDiv()
@@ -312,7 +312,7 @@ func SinglyMenu() {
 			case 14:
 				l.OrderDescending()
 			case 15:
-				l.Revert()
+				l.Reverse()
 			case 16:
 				l.Clear()
 			case 0:

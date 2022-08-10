@@ -186,7 +186,7 @@ func (l *DoublyLinkedList) OrderDescending() {
 	l.order("desc")
 }
 
-func (l *DoublyLinkedList) Revert() {
+func (l *DoublyLinkedList) Reverse() {
 	head := l.head
 	tail := l.tail
 	for i, j := 0, l.count-1; i < j; i, j = i+1, j-1 {
@@ -287,7 +287,7 @@ func DoublyMenu() {
 		fmt.Printf("%2d | %s\n", 12, "Search by value")
 		fmt.Printf("%2d | %s\n", 13, "Order ascending")
 		fmt.Printf("%2d | %s\n", 14, "Order descending")
-		fmt.Printf("%2d | %s\n", 15, "Revert list")
+		fmt.Printf("%2d | %s\n", 15, "Reverse list")
 		fmt.Printf("%2d | %s\n", 16, "Clear list")
 		fmt.Printf("%2d | %s\n", 0, "Back to main menu")
 		utils.PrintDiv()
@@ -331,7 +331,7 @@ func DoublyMenu() {
 			case 14:
 				l.OrderDescending()
 			case 15:
-				l.Revert()
+				l.Reverse()
 			case 16:
 				l.Clear()
 			case 0:
