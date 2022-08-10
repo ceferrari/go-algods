@@ -25,6 +25,11 @@ func (l *SinglyLinkedList) InsertHead(val int) {
 
 func (l *SinglyLinkedList) InsertTail(val int) {
 	node := &SinglyNode{val: val}
+	if l.head == nil {
+		l.head = node
+		l.count++
+		return
+	}
 	curr := l.head
 	for curr.next != nil {
 		curr = curr.next
@@ -166,6 +171,40 @@ func (l *SinglyLinkedList) SearchValue(val int) {
 	fmt.Scanln()
 }
 
+func (l *SinglyLinkedList) order(dir string) {
+	for i := l.head; i != nil; i = i.next {
+		for j := i.next; j != nil; j = j.next {
+			if (dir == "asc" && i.val > j.val) || (dir == "desc" && i.val < j.val) {
+				temp := j.val
+				j.val = i.val
+				i.val = temp
+			}
+		}
+	}
+}
+
+func (l *SinglyLinkedList) OrderAscending() {
+	l.order("asc")
+}
+
+func (l *SinglyLinkedList) OrderDescending() {
+	l.order("desc")
+}
+
+func (l *SinglyLinkedList) Revert() {
+	a := make([]int, l.count)
+	curr := l.head
+	for i := 0; curr != nil; i++ {
+		a[i] = curr.val
+		curr = curr.next
+	}
+	curr = l.head
+	for i := len(a) - 1; curr != nil; i-- {
+		curr.val = a[i]
+		curr = curr.next
+	}
+}
+
 func (l *SinglyLinkedList) Clear() {
 	l.count = 0
 	l.head = nil
@@ -201,6 +240,15 @@ func (l *SinglyLinkedList) print() {
 
 func SinglyMenu() {
 	l := SinglyLinkedList{}
+	l.InsertTail(6)
+	l.InsertTail(3)
+	l.InsertTail(1)
+	l.InsertTail(4)
+	l.InsertTail(9)
+	l.InsertTail(5)
+	l.InsertTail(8)
+	l.InsertTail(7)
+	l.InsertTail(2)
 	op := -1
 	for op != 0 {
 		utils.ClearTerminal()
@@ -221,7 +269,8 @@ func SinglyMenu() {
 		fmt.Printf("%2d | %s\n", 12, "Search by value")
 		fmt.Printf("%2d | %s\n", 13, "Order ascending")
 		fmt.Printf("%2d | %s\n", 14, "Order descending")
-		fmt.Printf("%2d | %s\n", 15, "Clear list")
+		fmt.Printf("%2d | %s\n", 15, "Revert list")
+		fmt.Printf("%2d | %s\n", 16, "Clear list")
 		fmt.Printf("%2d | %s\n", 0, "Back to main menu")
 		utils.PrintDiv()
 		fmt.Printf("%2d | ", l.count)
@@ -259,7 +308,13 @@ func SinglyMenu() {
 				l.SearchPosition(utils.ReadPos())
 			case 12:
 				l.SearchValue(utils.ReadVal())
+			case 13:
+				l.OrderAscending()
+			case 14:
+				l.OrderDescending()
 			case 15:
+				l.Revert()
+			case 16:
 				l.Clear()
 			case 0:
 			default:
