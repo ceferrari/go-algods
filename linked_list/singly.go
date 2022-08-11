@@ -190,7 +190,7 @@ func (l *SinglyLinkedList) OrderDescending() {
 	l.order("desc")
 }
 
-func (l *SinglyLinkedList) Reverse() {
+func (l *SinglyLinkedList) ReverseDefault() {
 	a := make([]int, l.count)
 	curr := l.head
 	for i := 0; curr != nil; i++ {
@@ -202,6 +202,28 @@ func (l *SinglyLinkedList) Reverse() {
 		curr.val = a[i]
 		curr = curr.next
 	}
+}
+
+func (l *SinglyLinkedList) ReverseIterative() {
+	var prev, curr, next *SinglyNode = nil, l.head, nil
+	for curr != nil {
+		next = curr.next
+		curr.next = prev
+		prev = curr
+		curr = next
+	}
+	l.head = prev
+}
+
+func (l *SinglyLinkedList) ReverseRecursive(head *SinglyNode) *SinglyNode {
+	if head == nil || head.next == nil {
+		l.head = head
+		return head
+	}
+	rest := l.ReverseRecursive(head.next)
+	head.next.next = head
+	head.next = nil
+	return rest
 }
 
 func (l *SinglyLinkedList) Clear() {
@@ -268,8 +290,10 @@ func SinglyMenu() {
 		fmt.Printf("%2d | %s\n", 12, "Search by value")
 		fmt.Printf("%2d | %s\n", 13, "Order ascending")
 		fmt.Printf("%2d | %s\n", 14, "Order descending")
-		fmt.Printf("%2d | %s\n", 15, "Reverse list")
-		fmt.Printf("%2d | %s\n", 16, "Clear list")
+		fmt.Printf("%2d | %s\n", 15, "Reverse (default)")
+		fmt.Printf("%2d | %s\n", 16, "Reverse (iterative)")
+		fmt.Printf("%2d | %s\n", 17, "Reverse (recursive)")
+		fmt.Printf("%2d | %s\n", 18, "Clear list")
 		fmt.Printf("%2d | %s\n", 0, "Back to main menu")
 		utils.PrintDiv()
 		fmt.Printf("%2d | ", l.count)
@@ -312,8 +336,12 @@ func SinglyMenu() {
 			case 14:
 				l.OrderDescending()
 			case 15:
-				l.Reverse()
+				l.ReverseDefault()
 			case 16:
+				l.ReverseIterative()
+			case 17:
+				l.ReverseRecursive(l.head)
+			case 18:
 				l.Clear()
 			case 0:
 			default:
