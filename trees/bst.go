@@ -1,4 +1,4 @@
-package binary_tree
+package trees
 
 import "fmt"
 
@@ -76,7 +76,7 @@ func (b *BinarySearchTree) PostOrder(function func(int)) {
 	postOrder(b.root, function)
 }
 
-func Traverse() {
+func BST() {
 	b := &BinarySearchTree{}
 	b.Insert(25)
 	b.Insert(20)

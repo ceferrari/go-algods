@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 
-	binaryTree "github.com/ceferrari/go-algods/binary_tree"
-	hashTable "github.com/ceferrari/go-algods/hash_table"
-	linkedList "github.com/ceferrari/go-algods/linked_list"
-	stackQueue "github.com/ceferrari/go-algods/stack_queue"
+	"github.com/ceferrari/go-algods/graphs"
+	"github.com/ceferrari/go-algods/lists"
+	"github.com/ceferrari/go-algods/maps"
+	"github.com/ceferrari/go-algods/queues"
+	"github.com/ceferrari/go-algods/stacks"
+	"github.com/ceferrari/go-algods/trees"
 	"github.com/ceferrari/go-algods/utils"
 )
 
@@ -17,11 +19,15 @@ func main() {
 		utils.PrintDiv()
 		fmt.Println("*** Algorithms & Data Structures ***")
 		utils.PrintDiv()
-		fmt.Printf("%2d | %s\n", 1, "Binary Tree - Binary Search Tree")
-		fmt.Printf("%2d | %s\n", 2, "Hash Table - Double Hashing")
-		fmt.Printf("%2d | %s\n", 3, "Linked List - Singly")
-		fmt.Printf("%2d | %s\n", 4, "Linked List - Doubly")
-		fmt.Printf("%2d | %s\n", 5, "Stack & Queue - Stack")
+		fmt.Printf("%2d | %s\n", 1, "[Trees] Binary Search Tree")
+		fmt.Printf("%2d | %s\n", 2, "[Maps] Double Hashing")
+		fmt.Printf("%2d | %s\n", 3, "[Lists] Singly Linked List")
+		fmt.Printf("%2d | %s\n", 4, "[Lists] Doubly Linked List")
+		fmt.Printf("%2d | %s\n", 5, "[Stacks] Stack")
+		fmt.Printf("%2d | %s\n", 6, "[Queues] Queue")
+		fmt.Printf("%2d | %s\n", 7, "[Graphs] DFS (Iterative)")
+		fmt.Printf("%2d | %s\n", 8, "[Graphs] DFS (Recursive)")
+		fmt.Printf("%2d | %s\n", 9, "[Graphs] BFS")
 		fmt.Printf("%2d | %s\n", 0, "Exit")
 		utils.PrintDiv()
 		utils.ChooseOption()
@@ -32,17 +38,29 @@ func main() {
 		} else {
 			switch op {
 			case 1:
-				binaryTree.Traverse()
+				trees.BST()
 				fmt.Scanln()
 			case 2:
-				hashTable.DoubleHashing()
+				maps.DoubleHashing()
 				fmt.Scanln()
 			case 3:
-				linkedList.SinglyMenu()
+				lists.SinglyMenu()
 			case 4:
-				linkedList.DoublyMenu()
+				lists.DoublyMenu()
 			case 5:
-				stackQueue.RunStack()
+				stacks.RunStack()
+				fmt.Scanln()
+			case 6:
+				queues.RunQueue()
+				fmt.Scanln()
+			case 7:
+				graphs.DFS(1)
+				fmt.Scanln()
+			case 8:
+				graphs.DFSRecursive(1, map[int]bool{})
+				fmt.Scanln()
+			case 9:
+				graphs.BFS(1)
 				fmt.Scanln()
 			case 0:
 				utils.Exit()

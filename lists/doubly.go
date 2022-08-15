@@ -1,4 +1,4 @@
-package linked_list
+package lists
 
 import (
 	"fmt"
@@ -6,38 +6,45 @@ import (
 	"github.com/ceferrari/go-algods/utils"
 )
 
-type SinglyNode struct {
+type DoublyNode struct {
 	val  int
-	next *SinglyNode
+	prev *DoublyNode
+	next *DoublyNode
 }
 
-type SinglyLinkedList struct {
+type DoublyLinkedList struct {
 	count int
-	head  *SinglyNode
+	head  *DoublyNode
+	tail  *DoublyNode
 }
 
-func (l *SinglyLinkedList) InsertHead(val int) {
-	node := &SinglyNode{val: val}
+func (l *DoublyLinkedList) InsertHead(val int) {
+	node := &DoublyNode{val: val}
 	node.next = l.head
+	if l.head != nil {
+		l.head.prev = node
+	}
 	l.head = node
+	if l.tail == nil {
+		l.tail = node
+	}
 	l.count++
 }
 
-func (l *SinglyLinkedList) InsertTail(val int) {
+func (l *DoublyLinkedList) InsertTail(val int) {
+	node := &DoublyNode{val: val}
+	node.prev = l.tail
+	if l.tail != nil {
+		l.tail.next = node
+	}
+	l.tail = node
 	if l.head == nil {
-		l.InsertHead(val)
-		return
+		l.head = node
 	}
-	node := &SinglyNode{val: val}
-	curr := l.head
-	for curr.next != nil {
-		curr = curr.next
-	}
-	curr.next = node
 	l.count++
 }
 
-func (l *SinglyLinkedList) InsertPosition(val, pos int) {
+func (l *DoublyLinkedList) InsertPosition(val, pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -45,12 +52,14 @@ func (l *SinglyLinkedList) InsertPosition(val, pos int) {
 		l.InsertHead(val)
 		return
 	}
-	curr := l.head
-	for i := 1; curr.next != nil; i++ {
+	curr := l.head.next
+	for i := 1; curr != nil; i++ {
 		if i == pos {
-			node := &SinglyNode{val: val}
-			node.next = curr.next
-			curr.next = node
+			node := &DoublyNode{val: val}
+			node.prev = curr.prev
+			node.next = curr
+			curr.prev.next = node
+			curr.prev = node
 			break
 		}
 		curr = curr.next
@@ -58,25 +67,21 @@ func (l *SinglyLinkedList) InsertPosition(val, pos int) {
 	l.count++
 }
 
-func (l *SinglyLinkedList) UpdateHead(val int) {
+func (l *DoublyLinkedList) UpdateHead(val int) {
 	if !l.checkHead() {
 		return
 	}
 	l.head.val = val
 }
 
-func (l *SinglyLinkedList) UpdateTail(val int) {
-	if !l.checkHead() {
+func (l *DoublyLinkedList) UpdateTail(val int) {
+	if !l.checkTail() {
 		return
 	}
-	curr := l.head
-	for curr.next != nil {
-		curr = curr.next
-	}
-	curr.val = val
+	l.tail.val = val
 }
 
-func (l *SinglyLinkedList) UpdatePosition(val, pos int) {
+func (l *DoublyLinkedList) UpdatePosition(val, pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -87,59 +92,50 @@ func (l *SinglyLinkedList) UpdatePosition(val, pos int) {
 	curr.val = val
 }
 
-func (l *SinglyLinkedList) RemoveHead() {
+func (l *DoublyLinkedList) RemoveHead() {
 	if !l.checkHead() {
 		return
 	}
 	l.head = l.head.next
+	if l.head != nil {
+		l.head.prev = nil
+	}
 	l.count--
 }
 
-func (l *SinglyLinkedList) RemoveTail() {
-	if !l.checkHead() {
+func (l *DoublyLinkedList) RemoveTail() {
+	if !l.checkTail() {
 		return
 	}
-	curr := l.head
-	for curr.next != nil && curr.next.next != nil {
-		curr = curr.next
+	l.tail = l.tail.prev
+	if l.tail != nil {
+		l.tail.next = nil
 	}
-	curr.next = nil
 	l.count--
 }
 
-func (l *SinglyLinkedList) RemovePosition(pos int) {
+func (l *DoublyLinkedList) RemovePosition(pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
-	if pos == 0 {
-		l.RemoveHead()
-		return
-	}
 	curr := l.head
-	for i := 1; curr.next != nil && i != pos; i++ {
-		if i != pos {
-			curr.next = curr.next.next
+	for i := 0; curr != nil && i != pos; i++ {
+		curr = curr.next
+	}
+	l.remove(curr)
+}
+
+func (l *DoublyLinkedList) RemoveValue(val int) {
+	curr := l.head
+	for curr != nil {
+		if curr.val == val {
+			l.remove(curr)
 		}
 		curr = curr.next
 	}
-	l.count--
 }
 
-func (l *SinglyLinkedList) RemoveValue(val int) {
-	curr := l.head
-	for curr.next != nil {
-		if curr.next.val == val {
-			curr.next = curr.next.next
-			l.count--
-		}
-		curr = curr.next
-	}
-	if l.head.val == val {
-		l.RemoveHead()
-	}
-}
-
-func (l *SinglyLinkedList) SearchPosition(pos int) {
+func (l *DoublyLinkedList) SearchPosition(pos int) {
 	if !l.checkPosition(pos) {
 		return
 	}
@@ -152,7 +148,7 @@ func (l *SinglyLinkedList) SearchPosition(pos int) {
 	fmt.Scanln()
 }
 
-func (l *SinglyLinkedList) SearchValue(val int) {
+func (l *DoublyLinkedList) SearchValue(val int) {
 	poss := []int{}
 	curr := l.head
 	for i := 0; curr != nil; i++ {
@@ -170,7 +166,7 @@ func (l *SinglyLinkedList) SearchValue(val int) {
 	fmt.Scanln()
 }
 
-func (l *SinglyLinkedList) order(dir string) {
+func (l *DoublyLinkedList) order(dir string) {
 	for i := l.head; i != nil; i = i.next {
 		for j := i.next; j != nil; j = j.next {
 			if (dir == "asc" && i.val > j.val) || (dir == "desc" && i.val < j.val) {
@@ -182,30 +178,29 @@ func (l *SinglyLinkedList) order(dir string) {
 	}
 }
 
-func (l *SinglyLinkedList) OrderAscending() {
+func (l *DoublyLinkedList) OrderAscending() {
 	l.order("asc")
 }
 
-func (l *SinglyLinkedList) OrderDescending() {
+func (l *DoublyLinkedList) OrderDescending() {
 	l.order("desc")
 }
 
-func (l *SinglyLinkedList) ReverseDefault() {
-	a := make([]int, l.count)
-	curr := l.head
-	for i := 0; curr != nil; i++ {
-		a[i] = curr.val
-		curr = curr.next
-	}
-	curr = l.head
-	for i := len(a) - 1; curr != nil; i-- {
-		curr.val = a[i]
-		curr = curr.next
+func (l *DoublyLinkedList) ReverseDefault() {
+	head := l.head
+	tail := l.tail
+	for i, j := 0, l.count-1; i < j; i, j = i+1, j-1 {
+		temp := tail.val
+		tail.val = head.val
+		head.val = temp
+		head = head.next
+		tail = tail.prev
 	}
 }
 
-func (l *SinglyLinkedList) ReverseIterative() {
-	var prev, curr, next *SinglyNode = nil, l.head, nil
+func (l *DoublyLinkedList) ReverseIterative() {
+	l.tail = l.head
+	var prev, curr, next *DoublyNode = nil, l.head, nil
 	for curr != nil {
 		next = curr.next
 		curr.next = prev
@@ -215,23 +210,41 @@ func (l *SinglyLinkedList) ReverseIterative() {
 	l.head = prev
 }
 
-func (l *SinglyLinkedList) ReverseRecursive(head *SinglyNode) *SinglyNode {
+func (l *DoublyLinkedList) ReverseRecursive(head *DoublyNode) *DoublyNode {
 	if head == nil || head.next == nil {
 		l.head = head
 		return head
 	}
 	rest := l.ReverseRecursive(head.next)
+	if head.next.next != nil {
+		l.tail = head.next.next
+	}
 	head.next.next = head
 	head.next = nil
 	return rest
 }
 
-func (l *SinglyLinkedList) Clear() {
+func (l *DoublyLinkedList) Clear() {
 	l.count = 0
 	l.head = nil
+	l.tail = nil
 }
 
-func (l *SinglyLinkedList) checkHead() bool {
+func (l *DoublyLinkedList) remove(node *DoublyNode) {
+	if node == l.head {
+		l.RemoveHead()
+		return
+	}
+	if node == l.tail {
+		l.RemoveTail()
+		return
+	}
+	node.prev.next = node.next
+	node.next.prev = node.prev
+	l.count--
+}
+
+func (l *DoublyLinkedList) checkHead() bool {
 	if l.head == nil {
 		utils.PrintDiv()
 		fmt.Println("[FAIL] Head is null!")
@@ -241,7 +254,17 @@ func (l *SinglyLinkedList) checkHead() bool {
 	return true
 }
 
-func (l *SinglyLinkedList) checkPosition(pos int) bool {
+func (l *DoublyLinkedList) checkTail() bool {
+	if l.tail == nil {
+		utils.PrintDiv()
+		fmt.Println("[FAIL] Tail is null!")
+		fmt.Scanln()
+		return false
+	}
+	return true
+}
+
+func (l *DoublyLinkedList) checkPosition(pos int) bool {
 	if pos < 0 || pos >= l.count {
 		utils.PrintDiv()
 		fmt.Println("[FAIL] Invalid position!")
@@ -251,7 +274,7 @@ func (l *SinglyLinkedList) checkPosition(pos int) bool {
 	return true
 }
 
-func (l *SinglyLinkedList) print() {
+func (l *DoublyLinkedList) print() {
 	curr := l.head
 	for curr != nil {
 		fmt.Print(curr.val, " ")
@@ -259,8 +282,8 @@ func (l *SinglyLinkedList) print() {
 	}
 }
 
-func SinglyMenu() {
-	l := SinglyLinkedList{}
+func DoublyMenu() {
+	l := DoublyLinkedList{}
 	l.InsertTail(6)
 	l.InsertTail(3)
 	l.InsertTail(1)
@@ -274,7 +297,7 @@ func SinglyMenu() {
 	for op != 0 {
 		utils.ClearTerminal()
 		utils.PrintDiv()
-		fmt.Println("***      Singly Linked List      ***")
+		fmt.Println("***      Doubly Linked List      ***")
 		utils.PrintDiv()
 		fmt.Printf("%2d | %s\n", 1, "Insert at head")
 		fmt.Printf("%2d | %s\n", 2, "Insert at tail")

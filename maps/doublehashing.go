@@ -1,4 +1,4 @@
-package hash_table
+package maps
 
 import "fmt"
 
@@ -8,8 +8,8 @@ type Person struct {
 }
 
 type KeyValue struct {
-	key   string
-	value interface{}
+	key   any
+	value any
 }
 
 type HashMap struct {
@@ -52,7 +52,7 @@ func (m *HashMap) findIndex(key string) (bool, int) {
 	return false, -1
 }
 
-func (m *HashMap) Insert(key string, value interface{}) {
+func (m *HashMap) Insert(key string, value any) {
 	found, index := m.findIndex(key)
 	if index == -1 {
 		fmt.Println("could not insert into the map because it is full")
@@ -65,7 +65,7 @@ func (m *HashMap) Insert(key string, value interface{}) {
 	}
 }
 
-func (m *HashMap) Search(key string) interface{} {
+func (m *HashMap) Search(key string) any {
 	found, index := m.findIndex(key)
 	if found {
 		return m.table[index].value
