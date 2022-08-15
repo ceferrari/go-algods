@@ -12,6 +12,8 @@ import (
 	"github.com/ceferrari/go-algods/utils"
 )
 
+var printGraph = func(i int) { fmt.Print(i, "->") }
+
 func main() {
 	op := -1
 	for op != 0 {
@@ -19,8 +21,8 @@ func main() {
 		utils.PrintDiv()
 		fmt.Println("*** Algorithms & Data Structures ***")
 		utils.PrintDiv()
-		fmt.Printf("%2d | %s\n", 1, "[Trees] Binary Search Tree")
-		fmt.Printf("%2d | %s\n", 2, "[Maps] Double Hashing")
+		fmt.Printf("%2d | %s\n", 1, "[Maps] Double Hashing")
+		fmt.Printf("%2d | %s\n", 2, "[Trees] Binary Search Tree")
 		fmt.Printf("%2d | %s\n", 3, "[Lists] Singly Linked List")
 		fmt.Printf("%2d | %s\n", 4, "[Lists] Doubly Linked List")
 		fmt.Printf("%2d | %s\n", 5, "[Stacks] Stack")
@@ -38,10 +40,10 @@ func main() {
 		} else {
 			switch op {
 			case 1:
-				trees.BST()
+				maps.DoubleHashing()
 				fmt.Scanln()
 			case 2:
-				maps.DoubleHashing()
+				trees.BST()
 				fmt.Scanln()
 			case 3:
 				lists.SinglyMenu()
@@ -54,13 +56,13 @@ func main() {
 				queues.RunQueue()
 				fmt.Scanln()
 			case 7:
-				graphs.DFS(1)
+				graphs.DFS(1, printGraph)
 				fmt.Scanln()
 			case 8:
-				graphs.DFSRecursive(1, map[int]bool{})
+				graphs.DFSRecursive(1, map[int]bool{}, printGraph)
 				fmt.Scanln()
 			case 9:
-				graphs.BFS(1)
+				graphs.BFS(1, printGraph)
 				fmt.Scanln()
 			case 0:
 				utils.Exit()

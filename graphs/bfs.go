@@ -1,8 +1,6 @@
 package graphs
 
 import (
-	"fmt"
-
 	stackQueue "github.com/ceferrari/go-algods/queues"
 )
 
@@ -17,7 +15,7 @@ var bfsAdj = map[int][]int{
 	8: {},
 }
 
-func BFS(start int) {
+func BFS(start int, function func(int)) {
 	visited := map[int]bool{}
 	stack := stackQueue.Queue[int]()
 	stack.Enqueue(start)
@@ -25,10 +23,10 @@ func BFS(start int) {
 		node := stack.Dequeue()
 		if !visited[node] {
 			visited[node] = true
+			function(node)
 			for _, neighbor := range bfsAdj[node] {
 				stack.Enqueue(neighbor)
 			}
-			fmt.Print(node, "->")
 		}
 	}
 }

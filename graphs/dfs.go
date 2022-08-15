@@ -1,8 +1,6 @@
 package graphs
 
 import (
-	"fmt"
-
 	stackQueue "github.com/ceferrari/go-algods/stacks"
 )
 
@@ -17,7 +15,7 @@ var dfsAdj = map[int][]int{
 	8: {},
 }
 
-func DFS(start int) {
+func DFS(start int, function func(int)) {
 	visited := map[int]bool{}
 	stack := stackQueue.Stack[int]()
 	stack.Push(start)
@@ -25,20 +23,20 @@ func DFS(start int) {
 		node := stack.Pop()
 		if !visited[node] {
 			visited[node] = true
+			function(node)
 			for _, neighbor := range dfsAdj[node] {
 				stack.Push(neighbor)
 			}
-			fmt.Print(node, "->")
 		}
 	}
 }
 
-func DFSRecursive(node int, visited map[int]bool) {
+func DFSRecursive(node int, visited map[int]bool, function func(int)) {
 	if !visited[node] {
 		visited[node] = true
-		fmt.Print(node, "->")
+		function(node)
 		for _, neighbor := range dfsAdj[node] {
-			DFSRecursive(neighbor, visited)
+			DFSRecursive(neighbor, visited, function)
 		}
 	}
 }
